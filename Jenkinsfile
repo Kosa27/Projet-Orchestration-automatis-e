@@ -12,12 +12,7 @@ pipeline {
         stage('Init') {
             steps { sh 'terraform init -input=false' }
         }
-        stage('Validate') {
-            steps {
-                sh 'terraform fmt -check'
-                sh 'terraform validate'
-            }
-        }
+        
         stage('Plan ECS') {
             steps {
                 sh 'terraform plan -target=module.ecs -out=plan-ecs -input=false'
@@ -46,5 +41,11 @@ pipeline {
     }
     post {
         always { cleanWs() }
+    }
+}
+stage('Validate') {
+    steps {
+        sh 'terraform fmt'
+        sh 'terraform validate'
     }
 }
